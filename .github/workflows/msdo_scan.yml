@@ -1,0 +1,29 @@
+name: DFC Demo Scan
+
+on:
+  # Allows you to click a button in GitHub to run the scan instantly
+  workflow_dispatch: 
+  # Triggers automatically anytime code changes
+  push:
+    branches: [ "main" ]
+
+jobs:
+  dfc-security-scan:
+    name: Microsoft Security DevOps Scan
+    runs-on: windows-latest
+    permissions:
+      contents: read
+      id-token: write
+      actions: read
+
+    steps:
+      # Step 1: Check out the vulnerable files you just created
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Run the official Microsoft scanner
+      - name: Run Microsoft Security DevOps
+        uses: microsoft/security-devops-action@v1
+        id: msdo
+        with:
+          categories: 'IaC, Secrets, Code, Artifacts'
